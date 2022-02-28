@@ -1,30 +1,43 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+import 'services/auth_service.dart';
+
+late FirebaseAnalytics analytics;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+        apiKey: dotenv.env['FB_API_KEY'] ?? 'API_URL not found',
+        appId: dotenv.env['APP_ID'] ?? 'APP_ID not found',
+        messagingSenderId: dotenv.env['MESSAGING_SENDER_ID'] ??
+            'MESSAGING_SENDER_ID not found',
+        projectId: dotenv.env['FB_PROJECT_ID'] ?? 'FB_PROJECT_ID not found'),
+  );
+  analytics = FirebaseAnalytics.instance;
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+  //final _appRouter = AppRouter();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return MultiProvider(
+      providers: [
+        StreamProvider<User?>.value(
+          value: AuthService().user,
+          initialData: null,
+        )
+      ], //child: MaterialApp.router(routeInformationParser: routeInformationParser, routerDelegate: routerDelegate),
     );
   }
 }
@@ -52,11 +65,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
     });
   }

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "531065943654",
+    "project_id": "scene-recognizer",
+    "storage_bucket": "scene-recognizer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:531065943654:android:c898bc50fdeb7e84329fa7",
+        "android_client_info": {
+          "package_name": "com.example.flutter_scene_recognizer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "531065943654-r2kb4n25f28jdvbg6lcgb1q0u9ov5fon.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flutter_scene_recognizer",
+            "certificate_hash": "7f441077a8246c61548ca8fdf424ce691910e7ea"
+          }
+        },
+        {
+          "client_id": "531065943654-0ms3gr6qd02bnlnt9r5q4knhsddrmso1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvytEPDIRHttJr8ZUlIhrPBBig17xLQXM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "531065943654-0ms3gr6qd02bnlnt9r5q4knhsddrmso1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
