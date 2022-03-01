@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_scene_recognizer/screens/firegallery/fire_gallery.dart';
 import 'package:flutter_scene_recognizer/screens/homescreen/homescreen.dart';
 import 'package:flutter_scene_recognizer/screens/onboarding_wrapper/onboarding_wrapper.dart';
+import 'package:flutter_scene_recognizer/screens/scene_recognizer/image_capture.dart';
+import 'package:flutter_scene_recognizer/widgets/gallery_details.dart';
 
 // @CupertinoAutoRouter
 // @AdaptiveAutoRouter
@@ -10,6 +13,9 @@ import 'package:flutter_scene_recognizer/screens/onboarding_wrapper/onboarding_w
   routes: <AutoRoute>[
     AutoRoute(page: OnboardingWrapper, initial: true),
     AutoRoute(page: Homescreen, path: 'homescreen'),
+    AutoRoute(page: ImageCapture, path: 'image-capture'),
+    AutoRoute(page: FireGallery, path: 'gallery'),
+    AutoRoute(page: GalleryDetails, path: 'gallery-details'),
     /* AutoRoute(
         page: HomeScreen,
         path: '/homescreen',
