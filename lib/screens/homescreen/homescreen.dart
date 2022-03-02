@@ -1,9 +1,9 @@
-import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_scene_recognizer/screens/firegallery/fire_gallery.dart';
 import 'package:flutter_scene_recognizer/screens/flutter_fire_gallery/flutter_fire_gallery.dart';
 import 'package:flutter_scene_recognizer/screens/scene_recognizer/image_capture.dart';
+import 'package:provider/provider.dart';
 
 import '../../services/auth_service.dart';
 
@@ -23,54 +23,23 @@ class _HomescreenState extends State<Homescreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const createDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.amber,
         elevation: 0.0,
-        actions: <Widget>[
-          TextButton.icon(
-              onPressed: () async {
-                if (isLoggingOut) return;
-                setState(() {
-                  isLoggingOut = true;
-                });
-                try {
-                  await _authService.signOut();
-                  setState(() {
-                    isLoggingOut = false;
-                  });
-                } catch (e) {
-                  if (kDebugMode) {
-                    print("logged out");
-                  }
-                }
-              },
-              icon: isLoggingOut
-                  ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
-                  : const Icon(Icons.logout),
-              label: isLoggingOut
-                  ? const Text('logging out..')
-                  : const Text('logout'))
-        ],
         title: const Text('Scene Recognizer'),
       ),
       backgroundColor: Colors.white,
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: _controller,
-        children: [
-          //Container(color: Colors.red),
-          const ImageCapture(),
+        children: const [
+          ImageCapture(),
           FlutterFireGallery(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          /* BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ), */
           BottomNavigationBarItem(
             icon: Icon(Icons.computer),
             label: 'Image Capture',
@@ -94,5 +63,84 @@ class _HomescreenState extends State<Homescreen> {
           duration: const Duration(milliseconds: 200),
           curve: Curves.decelerate);
     });
+  }
+}
+
+class createDrawer extends StatefulWidget {
+  const createDrawer({Key? key}) : super(key: key);
+
+  @override
+  State<createDrawer> createState() => _createDrawerState();
+}
+
+class _createDrawerState extends State<createDrawer> {
+  bool isLoggingOut = false;
+  final AuthService _authService = AuthService();
+  @override
+  Widget build(BuildContext context) {
+    User user = Provider.of<User?>(context, listen: true)!;
+    return Drawer(
+      // Add a ListView to the drawer. This ensures the user can scroll
+      // through the options in the drawer if there isn't enough vertical
+      // space to fit everything.
+      child: ListView(
+        // Important: Remove any padding from the ListView.
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: const BoxDecoration(
+              color: Colors.blue,
+            ),
+            child: Center(
+                child: Text(
+              "Email: " + (user.email ?? 'Anonymous user'),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              textScaleFactor: 1.3,
+            )),
+          ),
+          const SizedBox(height: 40),
+          ListTile(
+            title: Text("AcountID on Firebase: " + user.uid),
+          ),
+          ListTile(
+            title: Text("Acount created: " +
+                user.metadata.creationTime!.toIso8601String()),
+          ),
+          ListTile(
+            title: Text("Last login: " +
+                user.metadata.lastSignInTime!.toIso8601String()),
+          ),
+          ListTile(
+              title: Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: TextButton.icon(
+                onPressed: () async {
+                  if (isLoggingOut) return;
+                  setState(() {
+                    isLoggingOut = true;
+                  });
+                  try {
+                    await _authService.signOut();
+                    setState(() {
+                      isLoggingOut = false;
+                    });
+                  } catch (e) {
+                    if (kDebugMode) {
+                      print("logged out");
+                    }
+                  }
+                },
+                icon: isLoggingOut
+                    ? const CircularProgressIndicator(
+                        color: Colors.white,
+                      )
+                    : const Icon(Icons.logout),
+                label: isLoggingOut
+                    ? const Text('logging out..')
+                    : const Text('logout')),
+          )),
+        ],
+      ),
+    );
   }
 }

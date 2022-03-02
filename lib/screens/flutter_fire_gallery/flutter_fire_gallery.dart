@@ -9,9 +9,10 @@ import 'package:provider/provider.dart';
 import '../../routes/router.gr.dart';
 
 class FlutterFireGallery extends StatelessWidget {
+  const FlutterFireGallery({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     final usersQuery = FirebaseFirestore.instance
         .collection('users')
         .doc(context.read<User>().uid)
@@ -84,8 +85,6 @@ class FlutterFireGallery extends StatelessWidget {
             )),
           ),
         );
-
-        //return Text('User name is ${image.keys}');
       },
     );
   }

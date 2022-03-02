@@ -19,13 +19,16 @@ class _OnboardingWrapperState extends State<OnboardingWrapper> {
 
     // If user is logged in show Home-, otherwise show SignIn/Registration-screen
     if (user == null) {
-      return SignInScreen(
-        providerConfigs: [
-          GoogleProviderConfiguration(
-            clientId: dotenv.env['CLIENT_ID'] ?? 'CLIENT_ID not found',
-          ),
-          const EmailProviderConfiguration()
-        ],
+      return Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: SignInScreen(
+          providerConfigs: [
+            GoogleProviderConfiguration(
+              clientId: dotenv.env['CLIENT_ID'] ?? 'CLIENT_ID not found',
+            ),
+            const EmailProviderConfiguration()
+          ],
+        ),
       );
     } else {
       return const Homescreen();
