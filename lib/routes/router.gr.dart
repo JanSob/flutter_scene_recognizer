@@ -11,6 +11,7 @@
 // ignore_for_file: type=lint
 
 import 'package:auto_route/auto_route.dart' as _i6;
+import 'package:cloud_firestore/cloud_firestore.dart' as _i8;
 import 'package:flutter/material.dart' as _i7;
 
 import '../screens/firegallery/fire_gallery.dart' as _i4;
@@ -47,8 +48,8 @@ class AppRouter extends _i6.RootStackRouter {
           routeData: routeData,
           child: _i5.GalleryDetails(
               key: args.key,
-              detailsImage: args.detailsImage,
-              detailsIndex: args.detailsIndex));
+              detailsImageUrl: args.detailsImageUrl,
+              snapshot: args.snapshot));
     }
   };
 
@@ -99,30 +100,30 @@ class FireGallery extends _i6.PageRouteInfo<void> {
 class GalleryDetails extends _i6.PageRouteInfo<GalleryDetailsArgs> {
   GalleryDetails(
       {_i7.Key? key,
-      required _i7.ImageProvider<Object> detailsImage,
-      required int detailsIndex})
+      required String detailsImageUrl,
+      required _i8.QueryDocumentSnapshot<Map<String, dynamic>> snapshot})
       : super(GalleryDetails.name,
             path: 'gallery-details',
             args: GalleryDetailsArgs(
                 key: key,
-                detailsImage: detailsImage,
-                detailsIndex: detailsIndex));
+                detailsImageUrl: detailsImageUrl,
+                snapshot: snapshot));
 
   static const String name = 'GalleryDetails';
 }
 
 class GalleryDetailsArgs {
   const GalleryDetailsArgs(
-      {this.key, required this.detailsImage, required this.detailsIndex});
+      {this.key, required this.detailsImageUrl, required this.snapshot});
 
   final _i7.Key? key;
 
-  final _i7.ImageProvider<Object> detailsImage;
+  final String detailsImageUrl;
 
-  final int detailsIndex;
+  final _i8.QueryDocumentSnapshot<Map<String, dynamic>> snapshot;
 
   @override
   String toString() {
-    return 'GalleryDetailsArgs{key: $key, detailsImage: $detailsImage, detailsIndex: $detailsIndex}';
+    return 'GalleryDetailsArgs{key: $key, detailsImageUrl: $detailsImageUrl, snapshot: $snapshot}';
   }
 }

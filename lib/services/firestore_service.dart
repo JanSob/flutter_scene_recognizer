@@ -17,6 +17,13 @@ class FireStoreService {
     await imageWithLabelsRef.add(imageWithLabels);
   }
 
+  Future<void> deleteImageWithLabel(DocumentReference documentReference) {
+    return documentReference
+        .delete()
+        .then((value) => print("Image with labels Deleted"))
+        .catchError((error) => print("Failed to delete user: $error"));
+  }
+
   Future<List<ImageWithLabels>> getAllImageWithLabels(User user) async {
     final imageWithLabelsRef = FirebaseFirestore.instance
         .collection('users')
@@ -29,27 +36,6 @@ class FireStoreService {
         );
     var results = await imageWithLabelsRef.get();
     var returnList = results.docs.map((doc) => doc.data()).toList();
-    print("this worked..?");
     return returnList;
   }
-
-/*   Future<List<Object>?> getAllImageWithLabels(User user) async {
-    CollectionReference _collectionRef = FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .collection('images');
-
-    // Get docs from collection reference
-    QuerySnapshot querySnapshot =
-        await _collectionRef.get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        print(result.data());
-      });
-    });
-
-    // Get data from docs and convert map to List
-    final allData = querySnapshot.docs.map((doc) => doc.data());
-
-    return null;
-  } */
 }

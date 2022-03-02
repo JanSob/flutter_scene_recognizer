@@ -6,10 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_scene_recognizer/services/firestoreage_service.dart';
 import 'package:provider/provider.dart';
-
-import 'models/image_with_labels.dart';
 import 'routes/router.gr.dart';
 import 'services/auth_service.dart';
 
@@ -26,7 +23,6 @@ void main() async {
             'MESSAGING_SENDER_ID not found',
         projectId: dotenv.env['FB_PROJECT_ID'] ?? 'FB_PROJECT_ID not found'),
   );
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
   analytics = FirebaseAnalytics.instance;
   runApp(MyApp());
 }

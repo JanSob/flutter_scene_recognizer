@@ -1,11 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_scene_recognizer/services/auth_service.dart';
-import 'package:flutter_scene_recognizer/widgets/gallery_gridview_tile.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:provider/provider.dart';
+
+import '../../routes/router.gr.dart';
 
 class FlutterFireGallery extends StatelessWidget {
   @override
@@ -24,7 +25,10 @@ class FlutterFireGallery extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: GestureDetector(
-            //onTap: //TODO: HERO,
+            onTap: () {
+              context.router.push(GalleryDetails(
+                  detailsImageUrl: image['imageUrl'], snapshot: snapshot));
+            },
             onDoubleTap: () => showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -69,7 +73,9 @@ class FlutterFireGallery extends StatelessWidget {
             child: Card(
                 child: Column(
               children: [
-                CachedNetworkImage(imageUrl: image['imageUrl']),
+                Hero(
+                    tag: image['imageUrl'],
+                    child: CachedNetworkImage(imageUrl: image['imageUrl'])),
                 for (int i = 0; i < 3 && i < (image['labels']).length; i++)
                   Text(
                     image['labels'][i].toString(),

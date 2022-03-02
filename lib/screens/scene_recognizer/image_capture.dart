@@ -6,9 +6,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
-
 import '../../services/ai_recognition_service.dart';
-import '../../services/auth_service.dart';
 
 class ImageCapture extends StatefulWidget {
   const ImageCapture({Key? key}) : super(key: key);
@@ -21,6 +19,8 @@ class _ImageCaptureState extends State<ImageCapture> {
   bool isLoggingOut = false;
   bool _imageIsCropped = false;
   bool _predictionSuccess = false;
+  bool _isUploading = false;
+  bool _uploadCompleted = false;
   final ImagePicker _picker = ImagePicker();
   File? _imageFile;
   List<dynamic>? predictionList;
@@ -33,7 +33,7 @@ class _ImageCaptureState extends State<ImageCapture> {
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
         children: [
           const Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Text(
                 '1. Please take/pick a photo from camera or local gallery',
                 style: TextStyle(fontWeight: FontWeight.bold)),
@@ -110,16 +110,30 @@ class _ImageCaptureState extends State<ImageCapture> {
                       "%)"),
                 ),
           //if (_predictionSuccess)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
-                '4. You can upload the Image and the results to your firestore-gallery' +
-                    fireStorePath,
-                style: const TextStyle(fontWeight: FontWeight.bold)),
+                '4. You can upload the Image and the results to your firestore-gallery',
+                style: TextStyle(fontWeight: FontWeight.bold)),
           ),
-          ElevatedButton(
-              onPressed: _predictionSuccess ? uploadFile : null,
-              child: const Center(child: Text('Upload to Firebase')))
+          if (!_isUploading && !_uploadCompleted)
+            ElevatedButton(
+                onPressed: _predictionSuccess ? uploadFile : null,
+                child: const Center(child: Text('Upload to Firebase'))),
+          if (_uploadCompleted)
+            const Center(
+                child: Text(
+              "Upload completed!",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )),
+          if (_isUploading)
+            const SizedBox(
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: Colors.blue,
+                ),
+              ),
+            )
         ]);
   }
 
@@ -129,6 +143,7 @@ class _ImageCaptureState extends State<ImageCapture> {
       if (selectedImage != null) {
         _imageIsCropped = false;
         _predictionSuccess = false;
+        _uploadCompleted = false;
         _imageFile = File(selectedImage.path);
       }
     });
@@ -152,6 +167,9 @@ class _ImageCaptureState extends State<ImageCapture> {
 
   Future uploadFile() async {
     if (_imageFile == null) return;
+    setState(() {
+      _isUploading = true;
+    });
     final fileName = _imageFile!.path;
     final destination = 'files/' + predictionList![0].toString();
     fireStorePath = destination;
@@ -163,5 +181,13 @@ class _ImageCaptureState extends State<ImageCapture> {
             predictionList!.length,
             (index) => (predictionList![index] as ImageLabel)
                 .label)); //;(predictionList![0] as ImageLabel).label);
+    setState(() {
+      _isUploading = false;
+      _uploadCompleted = true;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text(
+          "Image file and AI analysis were successfully uploaded to Firebase!"),
+    ));
   }
 }

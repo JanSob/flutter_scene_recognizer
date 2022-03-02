@@ -21,8 +21,8 @@ class GalleryGridViewTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: GestureDetector(
         onTap: () {
-          context.router.push(GalleryDetails(
-              detailsImage: cloudImage, detailsIndex: tileIndex));
+          /* context.router
+              .push(GalleryDetails(detailsImageUrl: imageWithLabel.imageUrl, snapshot: null)); */
         },
         child: GridTile(
           footer: Center(

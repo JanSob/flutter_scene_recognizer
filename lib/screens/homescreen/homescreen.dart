@@ -59,20 +59,18 @@ class _HomescreenState extends State<Homescreen> {
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: _controller,
-        //onPageChanged: (index) => _onItemTapped(index),
         children: [
-          Container(color: Colors.red),
+          //Container(color: Colors.red),
           const ImageCapture(),
           FlutterFireGallery(),
-          //const FireGallery()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+          /* BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
-          ),
+          ), */
           BottomNavigationBarItem(
             icon: Icon(Icons.computer),
             label: 'Image Capture',
